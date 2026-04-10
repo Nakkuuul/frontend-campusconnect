@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 :root {
   --bg: #0d0f14;
   --bg-card: #13161e;
@@ -24,6 +20,10 @@
   --radius-sm: 8px;
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * { box-sizing: border-box; padding: 0; margin: 0; }
 
 html, body {
@@ -33,7 +33,12 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, .font-display { font-family: 'Syne', sans-serif; }
+h1, h2, h3, h4, h5, h6,
+.font-display,
+.btn-primary, .btn-ghost, .btn-success,
+.label, .badge, .section-title {
+  font-family: 'Syne', sans-serif;
+}
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
