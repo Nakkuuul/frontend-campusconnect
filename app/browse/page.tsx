@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Navbar from '../components/Navbar';
 import ItemCard from '../components/ItemCard';
 import { itemService } from '../../lib/services/item.service';
-import { Search, SlidersHorizontal, X, Filter, ArrowUpDown, LayoutGrid, List } from 'lucide-react';
+import { Search, SlidersHorizontal, X, LayoutGrid, List } from 'lucide-react';
 import Link from 'next/link';
 
 const categories = ['All', 'Electronics', 'Documents', 'Accessories', 'Stationery', 'ID/Cards', 'Clothing', 'Keys', 'Other'];
@@ -265,7 +265,7 @@ export default function BrowsePage() {
         {hasActiveFilters && (
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16, alignItems: 'center' }}>
             <span style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600 }}>Active filters:</span>
-            {query && <span className="active-filter-chip" onClick={() => setQuery('')}>"{query}" <X size={9} /></span>}
+              {query && <span className="active-filter-chip" onClick={() => setQuery('')}>&quot;{query}&quot; <X size={9} /></span>}
             {typeFilter !== 'all' && <span className="active-filter-chip" onClick={() => setTypeFilter('all')} style={{ textTransform: 'capitalize' }}>{typeFilter} <X size={9} /></span>}
             {category !== 'All' && <span className="active-filter-chip" onClick={() => setCategory('All')}>{category} <X size={9} /></span>}
             {location !== 'All' && <span className="active-filter-chip" onClick={() => setLocation('All')}>{location} <X size={9} /></span>}
