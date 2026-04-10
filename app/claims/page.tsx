@@ -5,6 +5,23 @@ import { CheckCircle, Clock, XCircle, Eye, Shield, ChevronDown, ChevronUp } from
 import { claimsService } from '../../lib/services/claims.service';
 import { itemService } from '../../lib/services/item.service';
 
+interface Item {
+  _id: string;
+  title: string;
+  location: string;
+}
+
+interface Claim {
+  _id: string;
+  itemId: Item;
+  status: 'approved' | 'pending' | 'rejected';
+  answer1: string;
+  answer2: string;
+  proof?: string;
+  notes?: string;
+  createdAt: string;
+}
+
 const statusConfig = {
   approved: { label: 'Approved',       icon: CheckCircle, color: 'var(--accent-2)', bg: 'rgba(34,211,165,0.1)',  border: 'rgba(34,211,165,0.25)' },
   pending:  { label: 'Pending Review', icon: Clock,       color: '#f59e0b',          bg: 'rgba(245,158,11,0.1)', border: 'rgba(245,158,11,0.25)' },
@@ -12,8 +29,8 @@ const statusConfig = {
 };
 
 export default function ClaimsPage() {
-  const [claims, setClaims]       = useState<any[]>([]);
-  const [foundItems, setFoundItems] = useState<any[]>([]);
+  const [claims, setClaims]       = useState<Claim[]>([]);
+  const [foundItems, setFoundItems] = useState<Item[]>([]);
   const [loading, setLoading]     = useState(true);
   const [expanded, setExpanded]   = useState<string | null>(null);
   const [showForm, setShowForm]   = useState(false);
@@ -56,8 +73,9 @@ export default function ClaimsPage() {
       setClaims(prev => [newClaim, ...prev]);
       setClaimForm({ itemId: '', answer1: '', answer2: '', proof: '' });
       setShowForm(false);
-    } catch (err: any) {
-      setFormError(err.response?.data?.message || 'Failed to submit claim.');
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setFormError(error.response?.data?.message || 'Failed to submit claim.');
     } finally {
       setSubmitting(false);
     }
@@ -67,8 +85,9 @@ export default function ClaimsPage() {
     try {
       await claimsService.withdraw(claimId);
       setClaims(prev => prev.filter(c => c._id !== claimId));
-    } catch (err: any) {
-      alert(err.response?.data?.message || 'Could not withdraw claim.');
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      alert(error.response?.data?.message || 'Could not withdraw claim.');
     }
   };
 
@@ -80,7 +99,7 @@ export default function ClaimsPage() {
         <div className="animate-fadeUp" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 28 }}>
           <div>
             <h1 style={{ fontFamily: 'Syne', fontSize: 28, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 6 }}>My Claims</h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Track verification status for items you've claimed</p>
+            <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Track verification status for items you&apos;ve claimed</p>
           </div>
           <button className="btn-primary" onClick={() => setShowForm(!showForm)} style={{ marginTop: 4 }}>
             <Shield size={15} /> New Claim

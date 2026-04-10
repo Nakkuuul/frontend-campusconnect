@@ -1,6 +1,5 @@
 'use client';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { MapPin, Eye, EyeOff, ArrowRight, CheckCircle } from 'lucide-react';
 import { authService } from '../../lib/services/auth.service';
@@ -37,7 +36,6 @@ const errorStyle: React.CSSProperties = { fontSize: 11, color: '#e53935', margin
 const hintStyle: React.CSSProperties  = { fontSize: 11, color: 'var(--text-muted)', marginTop: 5 };
 
 export default function RegisterPage() {
-  const router = useRouter();
   const [showPass, setShowPass]         = useState(false);
   const [step, setStep]                 = useState(1);
   const [loading, setLoading]           = useState(false);
@@ -79,8 +77,9 @@ export default function RegisterPage() {
         role:       form.role as 'student' | 'faculty' | 'staff',
       });
       setStep(3);
-    } catch (err: any) {
-      setApiError(err.response?.data?.message || 'Registration failed. Please try again.');
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setApiError(error.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -207,8 +206,8 @@ export default function RegisterPage() {
               <div className="animate-float" style={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(34,211,165,0.12)', border: '1px solid rgba(34,211,165,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
                 <CheckCircle size={30} color="var(--accent-2)" />
               </div>
-              <h3 style={{ fontFamily: 'Syne', fontWeight: 800, fontSize: 20, marginBottom: 10 }}>You're in!</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginBottom: 24 }}>Account created. You're now signed in.</p>
+              <h3 style={{ fontFamily: 'Syne', fontWeight: 800, fontSize: 20, marginBottom: 10 }}>You&apos;re in!</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginBottom: 24 }}>Account created. You&apos;re now signed in.</p>
               <Link href="/dashboard" className="btn-primary" style={{ justifyContent: 'center', padding: '12px 28px' }}>
                 Go to Dashboard <ArrowRight size={16} />
               </Link>

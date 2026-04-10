@@ -9,6 +9,20 @@ const categories = ['All', 'Electronics', 'Documents', 'Accessories', 'Stationer
 const locations  = ['All', 'Main Library', 'Cafeteria Block C', 'Sports Complex', 'Computer Lab 101', 'Lecture Hall B2', 'Hostel Block A', 'Parking Area', 'Gym'];
 const statuses   = ['All', 'posted', 'matched', 'claimed', 'resolved'];
 
+interface Item {
+  _id: string;
+  id: string;
+  type: 'lost' | 'found';
+  title: string;
+  category: string;
+  location: string;
+  date: string;
+  status: 'posted' | 'matched' | 'claimed' | 'resolved';
+  description: string;
+  postedBy: string | { name: string };
+  image?: string;
+}
+
 export default function BrowsePage() {
   const [query, setQuery]           = useState('');
   const [typeFilter, setTypeFilter] = useState<'all' | 'lost' | 'found'>('all');
@@ -17,7 +31,7 @@ export default function BrowsePage() {
   const [status, setStatus]         = useState('All');
   const [showFilters, setShowFilters] = useState(false);
 
-  const [items, setItems]     = useState<any[]>([]);
+  const [items, setItems]     = useState<Item[]>([]);
   const [total, setTotal]     = useState(0);
   const [loading, setLoading] = useState(true);
 

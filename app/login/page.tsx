@@ -19,8 +19,9 @@ export default function LoginPage() {
     try {
       await authService.login(form);
       router.push('/dashboard');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -75,7 +76,7 @@ export default function LoginPage() {
 
           <div className="divider" />
           <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--text-muted)' }}>
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/register" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Register here</Link>
           </p>
         </div>

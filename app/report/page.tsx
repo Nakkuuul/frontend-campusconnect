@@ -1,8 +1,9 @@
 'use client';
 import { useState, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import Navbar from '../components/Navbar';
-import { Upload, CheckCircle, MapPin, Calendar, Tag, AlignLeft, ArrowRight, X, Image } from 'lucide-react';
+import { Upload, CheckCircle, MapPin, Calendar, Tag, AlignLeft, ArrowRight, X, Image as ImageIcon } from 'lucide-react';
 import { itemService } from '../../lib/services/item.service';
 
 const categories = ['Electronics', 'Documents', 'Accessories', 'Stationery', 'ID/Cards', 'Clothing', 'Keys', 'Other'];
@@ -47,8 +48,9 @@ function ReportForm() {
         image:       imageFile,
       });
       setSubmitted(true);
-    } catch (err: any) {
-      setApiError(err.response?.data?.message || 'Failed to post item. Please try again.');
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setApiError(error.response?.data?.message || 'Failed to post item. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -70,7 +72,7 @@ function ReportForm() {
         </div>
         <h2 style={{ fontFamily: 'Syne', fontWeight: 800, fontSize: 24, marginBottom: 12 }}>Item reported!</h2>
         <p style={{ color: 'var(--text-secondary)', fontSize: 15, marginBottom: 8 }}>
-          Your {type} item post is now live. We'll notify you of any matches.
+          Your {type} item post is now live. We&apos;ll notify you of any matches.
         </p>
         <p style={{ color: 'var(--text-muted)', fontSize: 13, marginBottom: 32 }}>Smart matching is scanning for potential matches…</p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
@@ -145,11 +147,11 @@ function ReportForm() {
 
       {/* Image upload */}
       <div style={{ marginBottom: 28 }}>
-        <label className="label"><Image size={10} style={{ display: 'inline', marginRight: 5 }} />Upload Image (optional)</label>
+        <label className="label"><ImageIcon size={10} style={{ display: 'inline', marginRight: 5 }} />Upload Image (optional)</label>
         <input ref={fileRef} type="file" accept="image/*" onChange={handleImage} style={{ display: 'none' }} />
         {imagePreview ? (
           <div style={{ position: 'relative', display: 'inline-block' }}>
-            <img src={imagePreview} alt="preview" style={{ width: 120, height: 120, objectFit: 'cover', borderRadius: 10, border: '1px solid var(--border)' }} />
+            <Image src={imagePreview} alt="preview" width={120} height={120} style={{ width: 120, height: 120, objectFit: 'cover', borderRadius: 10, border: '1px solid var(--border)' }} />
             <button type="button" onClick={() => { setImageFile(null); setImagePreview(null); }}
               style={{ position: 'absolute', top: -8, right: -8, width: 24, height: 24, borderRadius: '50%', background: 'var(--bg-card)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
               <X size={12} color="var(--text-muted)" />
@@ -184,7 +186,7 @@ export default function ReportPage() {
       <main style={{ maxWidth: 700, margin: '0 auto', padding: '80px 24px 48px' }}>
         <div className="animate-fadeUp" style={{ marginBottom: 28 }}>
           <h1 style={{ fontFamily: 'Syne', fontSize: 28, fontWeight: 800, letterSpacing: '-0.02em', marginBottom: 6 }}>Report an Item</h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Fill in the details and we'll match it with existing posts</p>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Fill in the details and we&apos;ll match it with existing posts</p>
         </div>
 
         <div className="card animate-fadeUp stagger-1" style={{ padding: 32 }}>

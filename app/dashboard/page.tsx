@@ -9,13 +9,39 @@ import { itemService } from '../../lib/services/item.service';
 import { userService } from '../../lib/services/user.service';
 import { authService } from '../../lib/services/auth.service';
 
+interface Item {
+  _id: string;
+  id: string;
+  type: 'lost' | 'found';
+  title: string;
+  category: string;
+  location: string;
+  date: string;
+  status: 'posted' | 'matched' | 'claimed' | 'resolved';
+  description: string;
+  postedBy: string | { name: string };
+  image?: string;
+}
+
+interface Notification {
+  _id: string;
+  message: string;
+  read: boolean;
+  createdAt: string;
+}
+
+interface RecoveryRate {
+  category: string;
+  rate: number;
+}
+
 export default function DashboardPage() {
   const user = authService.getCurrentUser();
 
   const [stats, setStats]               = useState({ totalItems: 0, resolvedThisMonth: 0, pendingClaims: 0, activeUsers: 0 });
-  const [myItems, setMyItems]           = useState<any[]>([]);
-  const [notifications, setNotifs]      = useState<any[]>([]);
-  const [recoveryRates, setRates]       = useState<any[]>([]);
+  const [myItems, setMyItems]           = useState<Item[]>([]);
+  const [notifications, setNotifs]      = useState<Notification[]>([]);
+  const [recoveryRates, setRates]       = useState<RecoveryRate[]>([]);
   const [loading, setLoading]           = useState(true);
 
   useEffect(() => {
@@ -113,7 +139,7 @@ export default function DashboardPage() {
                 {loading
                   ? <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>Loading…</p>
                   : myItems.length === 0
-                    ? <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>You haven't posted anything yet.</p>
+                    ? <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>You haven&apos;t posted anything yet.</p>
                     : myItems.map((item, i) => <ItemCard key={item._id} item={item} delay={i * 0.07} />)
                 }
               </div>

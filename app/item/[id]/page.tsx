@@ -1,6 +1,7 @@
 'use client';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Navbar from '../../components/Navbar';
 import Link from 'next/link';
 import { MapPin, Calendar, Tag, User, ArrowLeft, Shield, Share2, Flag, CheckCircle } from 'lucide-react';
@@ -13,12 +14,25 @@ const categoryEmoji: Record<string, string> = {
   Stationery: '✏️', 'ID/Cards': '🪪', Clothing: '👕', Keys: '🔑', Other: '📦',
 };
 
+interface Item {
+  _id: string;
+  type: 'lost' | 'found';
+  title: string;
+  category: string;
+  location: string;
+  date: string;
+  status: string;
+  description: string;
+  postedBy?: { _id: string; name: string };
+  image?: string;
+}
+
 export default function ItemDetailPage() {
   const { id }   = useParams();
   const router   = useRouter();
   const currentUser = authService.getCurrentUser();
 
-  const [item, setItem]           = useState<any>(null);
+  const [item, setItem]           = useState<Item | null>(null);
   const [loading, setLoading]     = useState(true);
   const [notFound, setNotFound]   = useState(false);
 
@@ -29,7 +43,7 @@ export default function ItemDetailPage() {
   const [answer1, setAnswer1]       = useState('');
   const [answer2, setAnswer2]       = useState('');
 
-  const [relatedItems, setRelatedItems] = useState<any[]>([]);
+  const [relatedItems, setRelatedItems] = useState<Item[]>([]);
 
   useEffect(() => {
     const load = async () => {
@@ -39,9 +53,10 @@ export default function ItemDetailPage() {
 
         // Fetch related items by same category
         const related = await itemService.getAll({ category: data.category });
-        setRelatedItems(related.items.filter((i: any) => i._id !== data._id).slice(0, 2));
-      } catch (err: any) {
-        if (err.response?.status === 404) setNotFound(true);
+        setRelatedItems(related.items.filter((i: Item) => i._id !== data._id).slice(0, 2));
+      } catch (err: unknown) {
+        const error = err as { response?: { status?: number } };
+        if (error.response?.status === 404) setNotFound(true);
       } finally {
         setLoading(false);
       }
@@ -57,11 +72,14 @@ export default function ItemDetailPage() {
     setClaimLoading(true);
     setClaimError('');
     try {
-      await claimsService.submit({ itemId: item._id, answer1, answer2 });
-      setClaimSent(true);
-      setClaimOpen(false);
-    } catch (err: any) {
-      setClaimError(err.response?.data?.message || 'Failed to submit claim.');
+      if (item) {
+        await claimsService.submit({ itemId: item._id, answer1, answer2 });
+        setClaimSent(true);
+        setClaimOpen(false);
+      }
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setClaimError(error.response?.data?.message || 'Failed to submit claim.');
     } finally {
       setClaimLoading(false);
     }
@@ -154,7 +172,7 @@ export default function ItemDetailPage() {
             {item.image && (
               <div style={{ marginBottom: 24 }}>
                 <p className="section-title">Photo</p>
-                <img src={`http://localhost:5000${item.image}`} alt={item.title}
+                <Image src={`http://localhost:5000${item.image}`} alt={item.title} width={800} height={300}
                   style={{ width: '100%', maxHeight: 300, objectFit: 'cover', borderRadius: 10, border: '1px solid var(--border)' }} />
               </div>
             )}
@@ -205,7 +223,7 @@ export default function ItemDetailPage() {
             {claimSent && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '14px 18px', background: 'rgba(34,211,165,0.08)', border: '1px solid rgba(34,211,165,0.25)', borderRadius: 10 }}>
                 <CheckCircle size={18} color="var(--accent-2)" />
-                <span style={{ fontSize: 14, color: '#34d399' }}>Claim submitted! You'll be notified within 24 hours.</span>
+                <span style={{ fontSize: 14, color: '#34d399' }}>Claim submitted! You&apos;ll be notified within 24 hours.</span>
               </div>
             )}
 

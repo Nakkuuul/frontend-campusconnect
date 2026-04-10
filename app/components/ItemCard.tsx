@@ -113,7 +113,7 @@ export default function ItemCard({ item, delay = 0 }: { item: Item; delay?: numb
       {/* Footer */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 2 }}>
         <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-          by <span style={{ color: 'var(--text-secondary)' }}>{item.postedBy?.name || item.postedBy}</span>
+          by <span style={{ color: 'var(--text-secondary)' }}>{typeof item.postedBy === 'string' ? item.postedBy : item.postedBy?.name}</span>
         </span>
         <Link
           href={`/item/${item.id}`}
