@@ -278,7 +278,7 @@ export default function Navbar() {
                   <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>{user?.email || user?.enrollment}</p>
                 </div>
 
-                <Link href="/dashboard" className="profile-item" onClick={() => setShowProfile(false)}>
+                <Link href="/profile" className="profile-item" onClick={() => setShowProfile(false)}>
                   <User size={13} /> Profile
                 </Link>
                 <Link href="/claims" className="profile-item" onClick={() => setShowProfile(false)}>
