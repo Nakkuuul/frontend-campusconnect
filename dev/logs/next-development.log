@@ -1,0 +1,7 @@
+[00:03:21.298] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/nakulthakur/Desktop/Samar/app'
+[00:03:21.302] Server  ERROR   ⨯ "unhandledRejection:" Error: ENOENT: no such file or directory, scandir '/Users/nakulthakur/Desktop/Samar/app'
+[00:03:21.308] Server  ERROR   ⨯ "unhandledRejection: " Error: ENOENT: no such file or directory, scandir '/Users/nakulthakur/Desktop/Samar/app'
+[00:03:21.336] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/nakulthakur/Desktop/Samar/app'
+[00:03:21.338] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/nakulthakur/Desktop/Samar/app'
+[00:03:21.494] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/nakulthakur/Desktop/Samar/app'
+[00:03:21.528] Server  ERROR   Error: ENOENT: no such file or directory, scandir '/Users/nakulthakur/Desktop/Samar/app'
